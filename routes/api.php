@@ -13,6 +13,20 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+
+    Route::post('login', 'AuthApiController@login');
+    Route::post('logout', 'AuthApiController@logout');
+    Route::post('refresh', 'AuthApiController@refresh');
+    Route::post('me', 'AuthApiController@me');
+
+});
+
 /*Route::apiResource('artikel','ArtikelAPIController');
 
 Route::get('artikel','ArtikelAPIController@index');
@@ -26,6 +40,7 @@ Route::get('artikel/{id}','ArtikelAPIController@show');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+//Jangan Ubah Isi dari Route/api.php
 
 //Soal1
 //Tampilkan kategori berita dengan id=40 dan dibuat oleh orang dengan email ntarihoran@siregar.org

@@ -4,33 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Artikel;
 use App\Berita;
-use Illuminate\Http\Request;
 use App\Pengumuman;
+use App\Galeri;
+use App\KategoriArtikel;
+use App\User;
+use App\KategoriGaleri;
+use Illuminate\Http\Request;
+
 class BabDuaController extends Controller
 {
+
     //Soal4
-//Tampilkan berita yang dibuat oleh user yang membuat pengumuman, artikel, galeri dan kategori_artikel
+    //Tampilkan berita yang dibuat oleh user yang membuat pengumuman, artikel, galeri dan kategori_artikel
     public function a4(){
-        $berita=Berita::whereHas('user',function ($q){
-            $q->has('pengumumans')->has('artikels')->has('galeris')->has('kategoriArtikels');
+        $beritas=Berita::whereHas('user',function($query){
+            $query->has('pengumumans')->has('artikels')->has('galeris')->has('kategoriArtikels');
+
         })->get();
 
-        return $berita;
+        return $beritas;
     }
+
 
     //Soal5
     //Tampilkan artikel yang dibuat oleh user yang membuat galeri dengan nama kategori galeri yang di akhiri dengan et.
     public function a5(){
-        $pengumumans=Artikel::whereHas('user',function ($query){
-            $query->whereHas('galeris',function($query){
-                $query->whereHas('kategoriGaleri',function ($query){
-                    $query->where('nama','like','%et.');
-                });
+        $artikels=Artikel::whereHas('user',function($query){
+        $query->whereHas('galeris',function($query){
+            $query->whereHas('kategoriGaleri',function($query){
+                $query->where('nama','like','%et.');
             });
-        })->get();
+        });
+        })->with('user.galeris.kategoriGaleri')->get();
 
-        return $pengumumans;
-    }
-
-
+        return $artikels;
+}
 }
